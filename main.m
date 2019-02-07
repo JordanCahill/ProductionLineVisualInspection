@@ -1,0 +1,68 @@
+clear all; close all; clc;
+
+imageDir = ('.\Pictures\All');  % Store directory of 'All' folder
+
+if ~isdir(imageDir)  % Check folder exists
+    warning('[Error reading images]: Folder does not exist: %s\n', imageDir);
+end
+
+allImages = dir(fullfile(imageDir,'*.jpg'));       % Get all image files in a struct
+
+for i = 1:length(allImages)   % Iterate through each image
+    
+    imageName = allImages(i).name;                  % Store the name of the current image
+    message = strcat(imageName,': ');  
+    image=imread(fullfile(imageDir, imageName));        % Read the pixelwise content of each image
+
+    numFaults=0; % Track number of faults in image
+    
+    if checkBottleMissing(image) % Don't need to check faults if no image
+        message = strcat(message,' No faults detected (No bottle)\n');  
+    else
+        
+        % If bottle present, check individually for each fault
+        
+        if checkBottleUnderfilled(image)
+            message = strcat(message,' Bottle underfilled, '); 
+            numFaults=numFaults+1;
+        end
+        
+        if checkBottleDeformed(image)
+            message = strcat(message,' Bottle deformed, '); 
+            numFaults=numFaults+1; 
+       
+        elseif checkBottleOverfilled(image) % Don't count overfill if bottle is deformed
+            message = strcat(message,' Bottle overfilled, '); 
+            numFaults=numFaults+1;
+        end
+        
+        if checkLabelMissing(image)
+            message = strcat(message,' Label missing, '); 
+            numFaults=numFaults+1;
+            
+        elseif checkLabelNotPrinted(image) % No need to check if no label
+            message = strcat(message,' Label not printed, '); 
+            numFaults=numFaults+1;
+            
+        elseif checkLabelNotStraight(image) % No need to check if no label
+            message = strcat(message,' Label not straight, '); 
+            numFaults=numFaults+1;
+        end
+        
+        if checkCapMissing(image)
+            message = strcat(message,' Bottlecap missing, '); 
+            numFaults=numFaults+1;
+        end
+
+        if numFaults == 0;
+            message = strcat(message,' No faults detected\n');
+        else  
+            % Tidy up print messages
+            message = message(1:end-1);
+            message = strcat(message,'\n');
+        end
+    end
+
+    fprintf(message);
+
+end
