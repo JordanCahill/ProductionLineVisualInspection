@@ -1,4 +1,4 @@
-clear all; close all; clc;
+clearvars; close all; clc;
 
 imageDir = ('.\Pictures\All');  % Store directory of 'All' folder
 
@@ -6,7 +6,12 @@ if ~isdir(imageDir)  % Check folder exists
     warning('[Error reading images]: Folder does not exist: %s\n', imageDir);
 end
 
+[~,~,truth] = xlsread('groundTruth.csv');
+
 allImages = dir(fullfile(imageDir,'*.jpg'));       % Get all image files in a struct
+
+correctDetections = 0; incorrectDetections = {};
+groundTruthIndex = 2;
 
 for i = 1:length(allImages)   % Iterate through each image
     
@@ -62,7 +67,24 @@ for i = 1:length(allImages)   % Iterate through each image
             message = strcat(message,'\n');
         end
     end
-
+    
+    % Call on evaluateDecision() to return the hypothesis result (FP, TN,
+    % etc.) and a 1 if bottle was processed correctly, 0 if not. 
+    % Also store the names of incorrectly processed images
+    [hypothesis, predictionResult] = evaluateDecision(message, truth(groundTruthIndex,:));
+    if predictionResult == 1
+        correctDetections = correctDetections + 1;
+    else
+        incorrectDetections{end+1} = [imageName,': ', hypothesis];
+    end
+    groundTruthIndex = groundTruthIndex + 1;
+    
     fprintf(message);
 
 end
+
+% Print the overall accuracy and the images processed incorrectly
+accuracy = (correctDetections/length(allImages))*100;
+fprintf('\nTotal Accuracy: %.2f %%\n', accuracy);
+fprintf('\nIncorrectly Processed images:\n');
+disp(incorrectDetections);
