@@ -1,6 +1,9 @@
 clearvars; close all; clc;
 
-imageDir = chooseFolder();
+% Allow Matlab to access functions in subdirectories seperated for neatness
+addpath('./utilityFunctions'); addpath('./checkFaultFunctions');
+
+imageDir = chooseFolder(); % Allow the user to choose which folder to process
 
 [~,~,truth] = xlsread('groundTruth.csv');
 
