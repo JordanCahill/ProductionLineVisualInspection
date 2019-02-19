@@ -10,6 +10,7 @@ function evaluatePerformance(correctDetections, incorrectDetections, numImages)
 
 TN=0; FN=0; FP=0;
 
+% Count number of FN,FP,TN
 for i = 1:length(incorrectDetections);
     if strfind(incorrectDetections{i}, 'False Positive')
         FP = FP + 1;
