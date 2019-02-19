@@ -1,10 +1,6 @@
 clearvars; close all; clc;
 
-imageDir = ('.\Pictures\All');  % Store directory of 'All' folder
-
-if ~isdir(imageDir)  % Check folder exists
-    warning('[Error reading images]: Folder does not exist: %s\n', imageDir);
-end
+imageDir = chooseDirectory();
 
 [~,~,truth] = xlsread('groundTruth.csv');
 
@@ -68,20 +64,24 @@ for i = 1:length(allImages)   % Iterate through each image
         end
     end
     
-    % Call on evaluateDecision() to return the hypothesis result (FP, TN,
-    % etc.) and a 1 if bottle was processed correctly, 0 if not. 
-    % Also store the names of incorrectly processed images
-    [hypothesis, predictionResult] = evaluateDecision(message, truth(groundTruthIndex,:));
-    if predictionResult == 1
-        correctDetections = correctDetections + 1;
-    else
-        incorrectDetections{end+1} = [imageName,': ', hypothesis];
+    if strcmpi(imageDir,'.\Pictures\All')
+        % Call on evaluateDecision() to return the hypothesis result (FP, TN,
+        % etc.) and a 1 if bottle was processed correctly, 0 if not. 
+        % Also store the names of incorrectly processed images
+        [hypothesis, predictionResult] = evaluateDecision(message, truth(groundTruthIndex,:));
+        if predictionResult == 1
+            correctDetections = correctDetections + 1;
+        else
+            incorrectDetections{end+1} = [imageName,': ', hypothesis];
+        end
+        groundTruthIndex = groundTruthIndex + 1;
     end
-    groundTruthIndex = groundTruthIndex + 1;
     
     fprintf(message);
 
 end
 
-numImages = length(allImages);
-evaluatePerformance(correctDetections, incorrectDetections, numImages, truth);
+if strcmpi(imageDir, '.\Pictures\All')
+    numImages = length(allImages);
+    evaluatePerformance(correctDetections, incorrectDetections, numImages);
+end
