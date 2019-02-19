@@ -1,6 +1,6 @@
 clearvars; close all; clc;
 
-imageDir = chooseDirectory();
+imageDir = chooseFolder();
 
 [~,~,truth] = xlsread('groundTruth.csv');
 
