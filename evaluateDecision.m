@@ -1,4 +1,4 @@
-function [hypothesis, correct] = evaluateDecision(message, truth);
+function [hypothesis, correct] = evaluateDecision(message, truth)
 % EVALUATE DECISION Compares the decision made by the script with the
 % ground truth by comparing the output message of a specific bottle to the
 % corresponding tuple in the ground truth cell

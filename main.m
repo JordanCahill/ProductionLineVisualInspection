@@ -83,8 +83,5 @@ for i = 1:length(allImages)   % Iterate through each image
 
 end
 
-% Print the overall accuracy and the images processed incorrectly
-accuracy = (correctDetections/length(allImages))*100;
-fprintf('\nTotal Accuracy: %.2f %%\n', accuracy);
-fprintf('\nIncorrectly Processed images:\n');
-disp(incorrectDetections);
+numImages = length(allImages);
+evaluatePerformance(correctDetections, incorrectDetections, numImages, truth);
