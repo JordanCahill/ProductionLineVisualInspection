@@ -1,7 +1,7 @@
 clearvars; close all; clc;
 
-% Allow Matlab to access functions in subdirectories seperated for neatness
-addpath('./utilityFunctions'); addpath('./checkFaultFunctions');
+% Allow Matlab to access functions in subdirectories 
+addpath(genpath(pwd));
 
 imageDir = chooseFolder(); % Allow the user to choose which folder to process
 

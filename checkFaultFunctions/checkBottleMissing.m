@@ -8,10 +8,10 @@ function bottleMissing = checkBottleMissing(image)
     image = rgb2gray(image);
     
     % Extract the middle section of the image
-    imageCener = cropImage(image, 110, 1,  240, 280);
+    imageCenter = cropImage(image, 110, 1,  240, 280);
     
     % Convert to binary image, threshold obtained using imhist()
-    imageBinary = imbinarize(imageCener, double(150/255));
+    imageBinary = imbinarize(imageCenter, double(150/255));
     
     % Calculate the percentage of black pixels (value=0) in the image
     blackPixels = sum(imageBinary(:)==0);

@@ -22,7 +22,7 @@ function labelNotStraight = checkLabelNotStraight(image)
     totalPixels = numel(labelBinary(:));
     percentage = 100*(blackPixels/totalPixels);
     
-    % Evaluate result >15%
+    % Evaluate result >13%
     thresholdResult = (percentage >= 13);
 
 
